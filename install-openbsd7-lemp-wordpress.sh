@@ -1,3 +1,18 @@
+# em0 moet worden veranderd in de naam als bij ifconfig staat bij het dhcp ip
+ifconfig em0 inet 192.168.1.7 netmask 255.255.255.0
+# or
+vim /etc/hostname.em0  ==> inet 192.168.1.7 255.255.255.0 NONE
+# check and change if needed DNS
+cat /etc/resolv.conf
+# check and change if needed routes
+netstat -rn
+route show
+# route add -net 192.168.1.0/24 192.168.1.1
+# Default Gateway
+vim /etc/mygate
+# activate the changes
+sh /etc/netstart
+
 # How to Install WordPress on OpenBSD 7.0 with Nginx
 # WordPress is a free, open-source content management system (CMS) with rich tools and features to make website development easy.
 # This article explains how to install WordPress on an OpenBSD 7.0 server with Nginx, MySQL, and PHP 7.4.
@@ -83,9 +98,9 @@ cp /etc/php-7.4.sample/* /etc/php-7.4
 #
 # 3. Configure Nginx for PHP-FPM
 #
-# Install Vim or your favorite text editor.
+# Install Vim or your favorite text editor. ==> choice 6
 #
-rcctl pkg_add vim
+pkg_add vim
 #
 # Edit the main Nginx configuration file.
 #
@@ -269,27 +284,25 @@ mysql
 #
 # Create the database.
 #
-MariaDB [(none)]>  CREATE DATABASE wordpress;
+CREATE DATABASE wordpress;
 #
 # Create a new database user and assign a strong password.
 #
-MariaDB [(none)]>   CREATE USER â€˜wpuserâ€™@â€™localhostâ€™ IDENTIFIED BY â€˜<strong password>â€™;
+CREATE USER 'wpuser'@'localhost' IDENTIFIED BY 'Password';
 #
 # Grant the user full rights to the WordPress database.
 #
-MariaDB [wordpress]> use wordpress;
+use wordpress;
 #
 #
 #
-MariaDB [wordpress]>  GRANT ALL PRIVILEGES ON wordpress.* TO 'wpuser'@'localhost';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wpuser'@'localhost';
 #
 # Refresh Privileges and exit the console.
 #
-MariaDB [wordpress]> FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;
 #
-#
-#
-MariaDB [wordpress]> EXIT
+EXIT
 #
 # Install and Configure WordPress
 #
@@ -299,11 +312,12 @@ MariaDB [wordpress]> EXIT
 #
 cd ~
 #
-wget https://wordpress.org/latest.tar.gz
+pkg_add wget unzip
+wget https://wordpress.org/latest.zip
 #
 # Extract the file.
 #
-tar -xvfz latest.tar.gz 
+unzip latest.tar.gz 
 #
 # Move extracted wordpress files to the webroot directory.
 #
@@ -317,7 +331,7 @@ chown -R www:www /var/www/htdocs/
 #
 # http://SERVER_IP
 #
-# Prepare your database information from the main web dashboard and click â€˜Letâ€™s Goâ€™.
+# Prepare your database information from the main web dashboard and click .
 #
 # Enter the Database name created earlier, a Username and associated Password. Then, under Database Host replace localhost with 127.0.0.1 to avoid PHP connection issues.
 #
